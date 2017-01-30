@@ -43,17 +43,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bank.cs" />
+    <Compile Include="blog\Blog.cs" />
+    <Compile Include="Cms.cs" />
+    <Compile Include="Music.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Webshop.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bank\" />
-    <Folder Include="blog\" />
     <Folder Include="music\" />
     <Folder Include="webshop\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fråga 1.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

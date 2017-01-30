@@ -7,7 +7,7 @@
     <ProjectGuid>{6F15B8A1-95AE-4A94-95AB-3E429A9472E7}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hemtenta_Karin_Jonsson</RootNamespace>
+    <RootNamespace>HemtentaTdd2017</RootNamespace>
     <AssemblyName>Hemtenta_Karin_Jonsson</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -48,6 +48,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bank\" />
+    <Folder Include="blog\" />
+    <Folder Include="music\" />
+    <Folder Include="webshop\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

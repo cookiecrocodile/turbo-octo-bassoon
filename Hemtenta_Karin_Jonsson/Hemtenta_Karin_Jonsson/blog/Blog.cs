@@ -61,7 +61,13 @@ namespace HemtentaTdd2017.blog
         // exception om Page har ett ogiltigt värde.
         public bool PublishPage(Page p)
         {
-            throw new NotImplementedException();
+            if (p == null)
+                throw new ArgumentNullException();
+
+            if (UserIsLoggedIn)
+                return true;
+
+            return false;
         }
 
         // För att skicka e-post måste användaren vara

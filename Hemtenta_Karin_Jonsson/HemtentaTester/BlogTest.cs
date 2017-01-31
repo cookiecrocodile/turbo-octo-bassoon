@@ -82,16 +82,11 @@ namespace HemtentaTester
         {
             User u = new User("LogMeOutUser");
 
-            var mockAuth = new Mock<IAuthenticator>();
-            mockAuth.Setup(x => x.GetUserFromDatabase(u.Name)).Returns(u);
-            blog.SetAuthenticator(mockAuth.Object);
+            CreateAuthMockAndSignIn(u);
 
-            blog.LoginUser(u);
             blog.LogoutUser(u);
 
-            bool result = blog.UserIsLoggedIn;
-
-            Assert.That(result, Is.False);
+            Assert.That(blog.UserIsLoggedIn, Is.False);
 
         }
 
@@ -105,22 +100,18 @@ namespace HemtentaTester
         //bool PublishPage(Page p);
 
         [Test]
-        public void PublishPage_InvalidPageThrowsException()
+        public void PublishPage_NullPageThrowsException()
         {
             Assert.That(() => blog.PublishPage(null), Throws.TypeOf<ArgumentNullException>());
         }
 
-        //[Test]
-        //public void PublishPage_UserNotLoggedInThrowsException()
-        //{
-
-        //}
 
         [Test]
         public void PublishPage_SuccessRetursTrue()
         {
             User u = new User("Publisher");
-            blog.LoginUser(u);
+
+            CreateAuthMockAndSignIn(u);
             
             Page p = new Page();
             bool result = blog.PublishPage(p);
@@ -128,12 +119,13 @@ namespace HemtentaTester
         }
 
         [Test]
-        public void PublishPage_FailReturnsFalse()
+        public void PublishPage_FailsIfNotLoggedIn()
         {
-            //if user is not logged in? Can it fail any other way?
+            User u = new User("Publisher");
+
             Page p = new Page();
             bool result = blog.PublishPage(p);
-            Assert.That(result, Is.True);
+            Assert.That(result, Is.False);
             
         }
 
@@ -152,17 +144,17 @@ namespace HemtentaTester
         }
 
         [Test]
-        public void SendEmail_ValidAndLoggedInReturnsTrue()
+        public void SendEmail_ValidAndLoggedInSuccess()
         {
             User u = new User("Hannibal");
-            blog.LoginUser(u);
+            CreateAuthMockAndSignIn(u);
 
             int result = blog.SendEmail("test@mail.net", "header", "body");
             Assert.That(result, Is.EqualTo(1));
         }
 
         [Test]
-        public void SendEmail_ValidNotLoggedInFalse()
+        public void SendEmail_ValidNotLoggedInFail()
         {
             int result = blog.SendEmail("test@mail.net", "header", "body");
             Assert.That(result, Is.EqualTo(0));
@@ -173,6 +165,14 @@ namespace HemtentaTester
         // Returnerar 1 om det gick att skicka mailet,
         // 0 annars.
 
+        public void CreateAuthMockAndSignIn(User u)
+        {
+            var mockAuth = new Mock<IAuthenticator>();
+            mockAuth.Setup(x => x.GetUserFromDatabase(u.Name)).Returns(u);
+            blog.SetAuthenticator(mockAuth.Object);
+
+            blog.LoginUser(u);
+        }
 
     }
 }

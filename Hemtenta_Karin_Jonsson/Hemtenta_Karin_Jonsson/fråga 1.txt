@@ -1,1 +1,9 @@
-﻿
+﻿Red, green, refactor
+
+Först skriver man ett test som misslyckas (innan man implementerat metoden man ska testa), sen skriver man minsta möjliga 
+implementation som får testet att gå igenom och sen kan man refaktorera koden så att den blir bättre. 
+
+Fast den beskrivningen blir lite missvisande, för det är ju oftast flera test på varje metod som ska gå igenom, 
+så i kursen har det mer varit att man först skriver testen, sedan kod som får första testet att gå igenom och 
+därefter kod så att nästa test också går igenom osv. tills alla testen visar grönt. 
+

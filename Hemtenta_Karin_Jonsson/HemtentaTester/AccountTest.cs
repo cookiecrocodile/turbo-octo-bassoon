@@ -29,9 +29,6 @@ namespace HemtentaTester
             account.Deposit(amount);
             Assert.That(account.Amount, Is.EqualTo(originalAmount + amount));
 
-            //Om det inte funkar, kolla på .Within(0.001)
-            //för att det är decimaltal
-            //Kolla att amount ökat med det insatta
         }
 
         [TestCase(-0.01)]
@@ -42,16 +39,15 @@ namespace HemtentaTester
         {
             Assert.That(() => account.Deposit(amount), Throws.TypeOf<IllegalAmountException>());
 
-            //negative numbers, 0(?), NaN, Infinity(s)
-            //IllegalAmountException
         }
 
         [Test]
         public void Deposit_ValidInputTooLargeForAccountThrowsException()
         {
-            account.Deposit(1);
 
-            Assert.That(() => account.Deposit(double.MaxValue), Throws.TypeOf<OperationNotPermittedException>());
+            account.Deposit(double.MaxValue);
+
+            Assert.That(() => account.Deposit(1), Throws.TypeOf<OperationNotPermittedException>());
 
         }
 
@@ -85,8 +81,6 @@ namespace HemtentaTester
         {
 
             Assert.That(() => account.Withdraw(0.1), Throws.TypeOf<InsufficientFundsException>());
-
-            //Använd .Within om den bråkar
             account.Deposit(5000);
             Assert.That(() => account.Withdraw(5000.1), Throws.TypeOf<InsufficientFundsException>());
         }
@@ -145,29 +139,5 @@ namespace HemtentaTester
             Assert.That((recieverOriginalAmount + transferAmount), Is.EqualTo(reciever.Amount));
 
         }
-
-        // Överför ett belopp från ett konto till ett annat
-        //void TransferFunds(IAccount destination, double amount);
-
-        //Kolla att amount är giltigt värde, annars exceptions
-        //Kolla att mottagande konto kan ta emot så mycket
-        //I så fall, överför och kolla så att Amount sjunkit och mottagande kontos Amount ökat
-        //Kolla att så mycket pengar får plats på mottagande konto, annars exception
-
-        /*
-         EXCEPTIONS
-
-        // Kastas när beloppet på kontot inte tillåter
-    // ett uttag eller en överföring
-    InsufficientFundsException
-
-    // Kastas för ogiltiga siffror
-   IllegalAmountException
-
-    // Kastas om en operation på kontot inte tillåts av någon
-    // anledning som inte de andra exceptions täcker in
-    OperationNotPermittedException
-         
-         */
     }
 }

@@ -19,7 +19,7 @@ namespace HemtentaTdd2017.bank
 
             var result = Amount + amount;
 
-            if (result <= amount && amount != 0) //overflow
+            if (result <= Amount && amount != 0) //overflow
             {
                 throw new OperationNotPermittedException();
             }

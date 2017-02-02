@@ -10,15 +10,15 @@ namespace HemtentaTdd2017
     {
         static void Main(string[] args)
         {
-            double max = double.MaxValue;
-            double tiny = 0.1;
+            //double max = double.MaxValue;
+            //double tiny = 0.1;
 
-            double number = max + tiny;
+            //double number = max + tiny;
 
-            Console.WriteLine("{0}+{1} gives the result {2}", max, tiny, number);
+            //Console.WriteLine("{0}+{1} gives the result {2}", max, tiny, number);
 
-            number = max + max;
-            Console.WriteLine("{0}+{0} gives the result {1}", max, number);
+            //number = max + max;
+            //Console.WriteLine("{0}+{0} gives the result {1}", max, number);
 
             Console.ReadLine();
         }

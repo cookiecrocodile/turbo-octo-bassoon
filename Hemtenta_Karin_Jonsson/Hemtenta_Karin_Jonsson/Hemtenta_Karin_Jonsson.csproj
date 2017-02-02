@@ -52,13 +52,13 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Webshop.cs" />
+    <Compile Include="webshop\Basket.cs" />
+    <Compile Include="webshop\MyWebshop.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="webshop\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fråga 1.txt" />
   </ItemGroup>

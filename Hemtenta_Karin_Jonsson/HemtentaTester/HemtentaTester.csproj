@@ -63,7 +63,12 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AccountTest.cs" />
+    <Compile Include="BasketTest.cs" />
     <Compile Include="BlogTest.cs" />
+    <Compile Include="FakeMediaDatabase.cs" />
+    <Compile Include="FakeSong.cs" />
+    <Compile Include="MusicPlayerTest.cs" />
+    <Compile Include="MyWebshopTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

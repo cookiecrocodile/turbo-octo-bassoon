@@ -26,10 +26,10 @@ namespace HemtentaTester
      Vilka är domänerna för IWebshop och IBasket?
 
      IWebshop: Basket: objekt som implementerar IBasket, eller null.
-               Checkout: objekt som implementerar IBilling, eller null
+               Checkout, billing: objekt som implementerar IBilling, eller null
 
      IBasket: AddProduct: Product kan vara giltiga Product-objekt eller null, amount kan vara alla heltal mellan
-              int.Min och int.Max
+              int.MinValue och int.MaxValue
               Remove Product: Product och amount, se ovan.
               TotalCost: värden mellan decimal.MinValue och decimal.MaxValue      
  

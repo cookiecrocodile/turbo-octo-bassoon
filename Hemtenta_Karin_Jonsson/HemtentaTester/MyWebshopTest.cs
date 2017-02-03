@@ -15,14 +15,11 @@ namespace HemtentaTester
      Ska några exceptions kastas?
     
      MyWebshop: 
-        Checkout: om IBilling kastar exception, om IBilling är null, om IBasket är null, om IBasket är tom 
+        Checkout: om IBilling kastar exception, om IBilling är null, om IBasket är null, om Basket är tom 
      Basket: 
         AddProduct: produkt är null, produktens property Name or null/empty, amount är 0 eller mindre
-        RemoveProduct: amount är mindre än 0, produkten är null, produkten finns inte i korgen
+        RemoveProduct: amount är mindre än 1, produkten är null, produkten finns inte i korgen
                        
-        Jag valde att inte kasta exception om man vill ta bort fler än det finns,
-        utan att i så fall istället bara ta bort de som finns.
-
         Jag har förutsatt att namnen på produkterna är unika. Om de inte är det
         får man tänka lite annorlunda.
 

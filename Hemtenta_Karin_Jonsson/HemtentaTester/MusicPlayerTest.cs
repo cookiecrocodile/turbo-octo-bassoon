@@ -42,7 +42,7 @@ namespace HemtentaTester
         [TestCase("")] //bestämde att en tom sträng inte är giltig
         public void LoadSongs_InvalidInputThrowsException(string search)
         {
-            Assert.That(()=>mp.LoadSongs(search), Throws.TypeOf<ArgumentException>());
+            Assert.That(() => mp.LoadSongs(search), Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace HemtentaTester
         }
 
         [Test]
-        public void LoadSongs_ThrowsExceptionIfDbConnectionNotOpen() 
+        public void LoadSongs_ThrowsExceptionIfDbConnectionNotOpen()
         {
             IMediaDatabase fakeDb = new FakeMediaDatabase();
 
@@ -67,65 +67,145 @@ namespace HemtentaTester
         }
 
         [Test]
-        public void Play_PlaysNextSongFromQueue()
+        public void Play_PlaysNextFromQueueIfNothingIsPlaying()
         {
-            var mockSoundMaker = new Mock<ISoundMaker>();
-            mockSoundMaker.Setup(x => x.NowPlaying).Returns("");
-            mp.SetSoundMaker(mockSoundMaker.Object);
+            FakeSoundMaker fsm = new FakeSoundMaker();
+            fsm.NowPlaying = "";
+            mp.SetSoundMaker(fsm);
 
-            //använd ISoundMaker, om den skickar tillbaka en tom sträng
-            //betyder det att ingen låt spelas (mocka att den skickar det svaret)
-            //spela då en låt
-            Assert.Fail();
+            string songtitle = "Mrs Robinson";
+
+            FakeMediaDatabase db = new FakeMediaDatabase();
+            db.fakeDbSongs = new List<ISong>() { new FakeSong(songtitle), new FakeSong("Satellit") };
+            mp.SetDb(db);
+
+            mp.LoadSongs("whatever");
+
+            mp.Play();
+
+            Assert.That(mp.NowPlaying, Is.EqualTo("Spelar " + songtitle));
+            Assert.That(fsm.PlayCount, Is.EqualTo(1));
         }
 
         [Test]
-        public void Play_DoesNothingIfASongIsAlreadyPlaying()
+        public void Play_DoesNothingIfSongIsAlreadyPlaying()
         {
-            var mockSoundMaker = new Mock<ISoundMaker>();
-            mockSoundMaker.Setup(x => x.NowPlaying).Returns("Everything is Awesome");
-            mp.SetSoundMaker(mockSoundMaker.Object);
+            FakeSoundMaker fsm = new FakeSoundMaker();
+            fsm.NowPlaying = "Everything is Awesome";
+            mp.SetSoundMaker(fsm);
 
-            //använd ISoundMaker, om den skickar tillbaka en sträng som inte är tom 
-            //betyder det att en låt redan spelas (mocka att den skickar det svaret)
+            FakeMediaDatabase db = new FakeMediaDatabase();
+            db.fakeDbSongs = new List<ISong>() { new FakeSong("Banankontakt") };
+            mp.SetDb(db);
 
-            // Titeln på sången som spelas just nu. Ska vara
-            // tom sträng om ingen sång spelas.
-            //string NowPlaying { get; }
-            Assert.Fail();
+            mp.LoadSongs("whatever");
+
+            mp.Play();
+
+            Assert.That(fsm.PlayCount, Is.EqualTo(0));
         }
-        
+
+        [Test]
+        public void Play_DoesNothingIfQueueIsEmpty()
+        {
+            FakeSoundMaker fsm = new FakeSoundMaker();
+            fsm.NowPlaying = "";
+            mp.SetSoundMaker(fsm);
+
+            mp.Play();
+
+            Assert.That(fsm.PlayCount, Is.EqualTo(0));
+
+        }
+
         [Test]
         public void Stop_StopsPlayingCurrentSongAndLeavesItInList()
         {
-            Assert.Fail();
+            FakeSong playing = new FakeSong("Bä bä vita lamm");
+            FakeSong nextInQueue = new FakeSong("Imse vimse spindel");
+
+            List<ISong> inDb = new List<ISong>()
+            {
+                playing, nextInQueue
+            };
+
+            FakeSoundMaker fsm = new FakeSoundMaker();
+            fsm.NowPlaying = playing.Title;
+            mp.SetSoundMaker(fsm);
+
+            FakeMediaDatabase db = new FakeMediaDatabase();
+            db.fakeDbSongs = inDb;
+            mp.SetDb(db);
+
+            mp.LoadSongs("whatever");
+
+            mp.Stop();
+
+            Assert.That(mp.NowPlaying, Is.EqualTo("Tystnad råder"));
+            Assert.That(mp.NumSongsInQueue, Is.EqualTo(inDb.Count));
+            Assert.That(fsm.StopCount, Is.EqualTo(1));
+
         }
 
         [Test]
         public void Stop_DoesNothingIfNoSongIsPlaying()
         {
-            Assert.Fail();
+            FakeSoundMaker fsm = new FakeSoundMaker();
+            fsm.NowPlaying = "";
+            mp.SetSoundMaker(fsm);
+
+            mp.Stop();
+
+            Assert.That(fsm.StopCount, Is.EqualTo(0));
         }
 
         [Test]
-        public void NextSong_StartsPlayingNextSongInQueue()
+        public void NextSong_PlaysNextSongInQueue()
         {
-            Assert.Fail();
+            FakeSong playing = new FakeSong("Purple Haze");
+            FakeSong nextInQueue = new FakeSong("Smoke on the Water");
+
+            List<ISong> inDb = new List<ISong>()
+            {
+                playing, nextInQueue
+            };
+
+            FakeSoundMaker fsm = new FakeSoundMaker();
+            fsm.NowPlaying = playing.Title;
+            mp.SetSoundMaker(fsm);
+
+            FakeMediaDatabase db = new FakeMediaDatabase();
+            db.fakeDbSongs = inDb;
+            mp.SetDb(db);
+
+            mp.LoadSongs("stuff");
+
+            int originallyInQueue = mp.NumSongsInQueue;
+            mp.NextSong();
+
+            Assert.That(mp.NowPlaying, Is.EqualTo("Spelar " + nextInQueue.Title));
+            Assert.That(mp.NumSongsInQueue, Is.EqualTo(originallyInQueue - 1));
+
         }
-        
 
         [Test]
         public void NextSong_StopsPlaybackIfQueueIsEmpty()
         {
-            Assert.Fail();
+            FakeSoundMaker fsm = new FakeSoundMaker();
+            mp.SetSoundMaker(fsm);
+
+            mp.NextSong();
+
+            Assert.That(fsm.StopCount, Is.EqualTo(1));
+            Assert.That(mp.NowPlaying, Is.EqualTo("Tystnad råder"));
         }
 
         [Test]
         public void NowPlaying_ReturnsCorrectStringWhenNothingIsPlaying()
         {
-            var mockSoundMaker = new Mock<ISoundMaker>();
-            mockSoundMaker.Setup(x => x.NowPlaying).Returns("");
-            mp.SetSoundMaker(mockSoundMaker.Object);
+            FakeSoundMaker fsm = new FakeSoundMaker();
+            fsm.NowPlaying = "";
+            mp.SetSoundMaker(fsm);
 
             string returned = mp.NowPlaying();
 
@@ -136,30 +216,14 @@ namespace HemtentaTester
         public void NowPlaying_ReturnsCorrectStringWhenSongIsPlaying()
         {
             string song = "Life On Mars";
+            FakeSoundMaker fsm = new FakeSoundMaker();
+            fsm.NowPlaying = song;
+            mp.SetSoundMaker(fsm);
 
-            var mockSoundMaker = new Mock<ISoundMaker>();
-            mockSoundMaker.Setup(x => x.NowPlaying).Returns(song);
-            mp.SetSoundMaker(mockSoundMaker.Object);
+            string expected = "Spelar " + song;
 
-            string returned = mp.NowPlaying();
-
-            Assert.That(returned, Is.EqualTo("Spelar " + song));
+            Assert.That(mp.NowPlaying(), Is.EqualTo(expected));
         }
-        /*
 
-        // Börjar spela nästa sång i kön. Om kön är tom
-        // har funktionen samma effekt som Stop().
-        void NextSong();
-
-        // Returnerar strängen "Tystnad råder" om ingen
-        // sång spelas, annars "Spelar <namnet på sången>".
-        // Exempel: "Spelar Born to run".
-        string NowPlaying();
-
-         // Antal sånger som finns i spellistan.
-        // Returnerar alltid ett heltal >= 0.
-        int NumSongsInQueue { get; }
-         
-         */
     }
 }

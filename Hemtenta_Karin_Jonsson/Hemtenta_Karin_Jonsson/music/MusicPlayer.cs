@@ -8,6 +8,7 @@ namespace HemtentaTdd2017.music
         IMediaDatabase mdb;
         ISoundMaker soundMaker;
         List<ISong> playlist = new List<ISong>();
+
         public void SetDb(IMediaDatabase db)
         {
             mdb = db;
@@ -44,9 +45,17 @@ namespace HemtentaTdd2017.music
 
         public void NextSong()
         {
-            // Börjar spela nästa sång i kön. Om kön är tom
-            // har funktionen samma effekt som Stop().
-            throw new NotImplementedException();
+            if (NumSongsInQueue <= 1)
+            {
+                soundMaker.Stop();
+                playlist.Clear();
+            }
+            else
+            {
+                playlist.RemoveAt(0);
+                soundMaker.Play(playlist[0]);
+            }
+
         }
 
         public string NowPlaying()
@@ -67,30 +76,15 @@ namespace HemtentaTdd2017.music
 
         public void Play()
         {
-            // Om ingen låt spelas för tillfället ska
-            // nästa sång i kön börja spelas. Om en låt
-            // redan spelas har funktionen ingen effekt.
-            throw new NotImplementedException();
+            if (NumSongsInQueue != 0 && soundMaker.NowPlaying == string.Empty)
+                soundMaker.Play(playlist[0]);
         }
 
         public void Stop()
         {
-            // Om en sång spelas ska den sluta spelas.
-            // Sången ligger kvar i spellistan. Om ingen
-            // sång spelas har funktionen ingen effekt.
-            throw new NotImplementedException();
+            if (soundMaker.NowPlaying != string.Empty)
+                soundMaker.Stop();
         }
 
-        /*
-         ISoundMaker har följande metoder:
-         
-        // Titeln på sången som spelas just nu. Ska vara
-        // tom sträng om ingen sång spelas.
-        string NowPlaying { get; }
-
-        void Play(ISong song);
-        void Stop();
-         
-         */
     }
 }

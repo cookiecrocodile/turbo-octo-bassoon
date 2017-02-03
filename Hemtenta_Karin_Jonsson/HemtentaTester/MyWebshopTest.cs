@@ -15,9 +15,9 @@ namespace HemtentaTester
      Ska några exceptions kastas?
     
      MyWebshop: 
-        Checkout: om IBilling kastar exception, om IBilling är null, om IBasket är tom 
+        Checkout: om IBilling kastar exception, om IBilling är null, om IBasket är null, om IBasket är tom 
      Basket: 
-        AddProduct: produkt är null, amount är 0 eller mindre
+        AddProduct: produkt är null, produktens property Name or null/empty, amount är 0 eller mindre
         RemoveProduct: amount är mindre än 0, produkten är null, produkten finns inte i korgen
                        
         Jag valde att inte kasta exception om man vill ta bort fler än det finns,
@@ -49,8 +49,7 @@ namespace HemtentaTester
             var mockBilling = new Mock<IBilling>();
 
             var basket = new Basket();
-            Product p = new Product();
-            p.Price = 50.5m;
+            Product p = new Product() { Name = "Thing", Price = 50.5m };
             basket.AddProduct(p, 4);
             decimal total = basket.TotalCost;
             mw.SetBasket(basket);
@@ -66,8 +65,7 @@ namespace HemtentaTester
         public void Checkout_ThrowsExceptionIfBillingFails()
         {
             var basket = new Basket();
-            Product p = new Product();
-            p.Price = 100m;
+            Product p = new Product() { Name = "Stuff", Price = 100m };
             basket.AddProduct(p, 4);
             decimal total = basket.TotalCost;
             mw.SetBasket(basket);
@@ -90,6 +88,14 @@ namespace HemtentaTester
 
             Assert.That(() => mw.Checkout(mockBilling.Object), Throws.TypeOf<Exception>());
             
+        }
+
+        [Test]
+        public void Checkout_BasketNullThrowsException()
+        {
+            var mockBilling = new Mock<IBilling>();
+
+            Assert.That(() => mw.Checkout(mockBilling.Object), Throws.TypeOf<NullReferenceException>());
         }
 
         [Test]

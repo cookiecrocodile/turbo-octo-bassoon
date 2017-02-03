@@ -9,7 +9,7 @@ namespace HemtentaTester
 {
     public class FakeMediaDatabase : IMediaDatabase
     {
-        List<ISong> songsInDb = new List<ISong>(); //Lägg sånger i
+        public List<ISong> fakeDbSongs { get; set; } = new List<ISong>();
 
         public bool IsConnected
         { get; set; }
@@ -26,7 +26,7 @@ namespace HemtentaTester
                 throw new DatabaseClosedException();
             }
 
-            return new List<ISong>();
+            return fakeDbSongs;
         }
 
         public void OpenConnection()

@@ -48,8 +48,6 @@ namespace HemtentaTester
         {
             Product p = null;
             Assert.That(() => b.AddProduct(p, 1), Throws.TypeOf<ArgumentNullException>());
-
-            
         }
 
         [Test]
@@ -71,9 +69,6 @@ namespace HemtentaTester
         [TestCase(17, 6)]
         public void RemoveProduct_SuccessRemovesCorrectAmount(int noPInDb, int noToRemove)
         {
-            //eftersom en produkt har Price som enda property har jag förutsatt att man
-            //kan identifiera den via priset, alltså att det inte finns flera produkter
-            //med samma pris
 
             Product p = new Product() { Name = "p", Price = 135.5m };
             b.AddProduct(p, noPInDb);

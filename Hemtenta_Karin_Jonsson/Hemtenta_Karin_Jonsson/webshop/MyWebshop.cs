@@ -20,6 +20,11 @@ namespace HemtentaTdd2017.webshop
             if (billing == null)
                 throw new ArgumentNullException();
 
+            if (Basket == null)
+            {
+                throw new NullReferenceException();
+            }
+
             if (Basket.TotalCost == 0)
                 throw new Exception();
 

@@ -67,6 +67,7 @@
     <Compile Include="BlogTest.cs" />
     <Compile Include="FakeMediaDatabase.cs" />
     <Compile Include="FakeSong.cs" />
+    <Compile Include="FakeSoundMaker.cs" />
     <Compile Include="MusicPlayerTest.cs" />
     <Compile Include="MyWebshopTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

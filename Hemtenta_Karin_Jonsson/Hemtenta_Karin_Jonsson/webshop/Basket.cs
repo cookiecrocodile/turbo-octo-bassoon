@@ -8,7 +8,7 @@ namespace HemtentaTdd2017.webshop
 {
     public class Basket : IBasket
     {
-        List<Product> products = new List<Product>(); //skapat en variabel för att hålla produkterna
+        List<Product> products = new List<Product>();
 
         public decimal TotalCost { get; private set; }
 
@@ -34,7 +34,7 @@ namespace HemtentaTdd2017.webshop
 
         public void RemoveProduct(Product p, int amount)
         {
-            if (amount < 0)
+            if (amount < 1)
                 throw new ArgumentException();
 
             var search = from pr in products
@@ -54,11 +54,11 @@ namespace HemtentaTdd2017.webshop
                 TotalCost -= hits * p.Price;
             }
 
-            if (hits > amount && amount != 0)
+            if (hits > amount)
             {
                 int count = 0;
                 
-                while(count< amount)
+                while(count < amount)
                 {
                     Product found = products.Find(item => item.Name == p.Name);
                     products.Remove(found);

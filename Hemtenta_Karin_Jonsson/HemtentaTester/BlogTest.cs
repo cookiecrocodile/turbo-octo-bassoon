@@ -18,7 +18,7 @@ namespace HemtentaTester
         }
 
         [Test]
-        public void LoginUser_ReturnsTrueIfLoginSucceeds()
+        public void LoginUser_Success()
         {
             User u = new User("testUser");
 
@@ -34,7 +34,7 @@ namespace HemtentaTester
         }
 
         [Test]
-        public void LoginUser_ReturnsFalseIfLoginFails()
+        public void LoginUser_WrongPasswordFail()
         {
             User dbUser = new User("testUser");
             User u = new User(dbUser.Name);
@@ -78,26 +78,16 @@ namespace HemtentaTester
         }
 
         [Test]
-        public void LogoutUser_LogsOutUserWhoIsLoggedIn()
+        public void LogoutUser_LogsOutUserWhoIsLoggedInSuccess()
         {
             User u = new User("LogMeOutUser");
-
             CreateAuthMockAndSignIn(u);
 
             blog.LogoutUser(u);
 
             Assert.That(blog.UserIsLoggedIn, Is.False);
-
         }
 
-
-        // För att publicera en sida måste Page vara
-        // ett giltigt Page-objekt och användaren
-        // måste vara inloggad.
-        // Returnerar true om det gick att publicera,
-        // false om publicering misslyckades och
-        // exception om Page har ett ogiltigt värde.
-        //bool PublishPage(Page p);
 
         [Test]
         public void PublishPage_NullPageThrowsException()
@@ -154,16 +144,12 @@ namespace HemtentaTester
         }
 
         [Test]
-        public void SendEmail_ValidNotLoggedInFail()
+        public void SendEmail_ValidParametersNotLoggedInFail()
         {
             int result = blog.SendEmail("test@mail.net", "header", "body");
             Assert.That(result, Is.EqualTo(0));
         }
 
-        // För att skicka e-post måste användaren vara
-        // inloggad och alla parametrar ha giltiga värden.
-        // Returnerar 1 om det gick att skicka mailet,
-        // 0 annars.
 
         public void CreateAuthMockAndSignIn(User u)
         {

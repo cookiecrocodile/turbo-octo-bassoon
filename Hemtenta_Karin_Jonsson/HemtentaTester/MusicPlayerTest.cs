@@ -59,7 +59,6 @@ namespace HemtentaTester
         public void LoadSongs_ThrowsExceptionIfDbConnectionNotOpen()
         {
             IMediaDatabase fakeDb = new FakeMediaDatabase();
-
             mp.SetDb(fakeDb);
 
             Assert.That(() => mp.LoadSongs("search"), Throws.TypeOf<DatabaseClosedException>());
@@ -90,8 +89,10 @@ namespace HemtentaTester
         [Test]
         public void Play_DoesNothingIfSongIsAlreadyPlaying()
         {
+            string songtitle = "Everything is Awesome";
+
             FakeSoundMaker fsm = new FakeSoundMaker();
-            fsm.NowPlaying = "Everything is Awesome";
+            fsm.NowPlaying = songtitle;
             mp.SetSoundMaker(fsm);
 
             FakeMediaDatabase db = new FakeMediaDatabase();
@@ -103,6 +104,7 @@ namespace HemtentaTester
             mp.Play();
 
             Assert.That(fsm.PlayCount, Is.EqualTo(0));
+            Assert.That(mp.NowPlaying, Is.EqualTo("Spelar " + songtitle));
         }
 
         [Test]
@@ -115,6 +117,7 @@ namespace HemtentaTester
             mp.Play();
 
             Assert.That(fsm.PlayCount, Is.EqualTo(0));
+            Assert.That(mp.NowPlaying, Is.EqualTo("Tystnad råder"));
 
         }
 
@@ -124,10 +127,7 @@ namespace HemtentaTester
             FakeSong playing = new FakeSong("Bä bä vita lamm");
             FakeSong nextInQueue = new FakeSong("Imse vimse spindel");
 
-            List<ISong> inDb = new List<ISong>()
-            {
-                playing, nextInQueue
-            };
+            List<ISong> inDb = new List<ISong>() { playing, nextInQueue };
 
             FakeSoundMaker fsm = new FakeSoundMaker();
             fsm.NowPlaying = playing.Title;
@@ -138,11 +138,12 @@ namespace HemtentaTester
             mp.SetDb(db);
 
             mp.LoadSongs("whatever");
+            int noBeforeStop = mp.NumSongsInQueue;
 
             mp.Stop();
 
             Assert.That(mp.NowPlaying, Is.EqualTo("Tystnad råder"));
-            Assert.That(mp.NumSongsInQueue, Is.EqualTo(inDb.Count));
+            Assert.That(mp.NumSongsInQueue, Is.EqualTo(noBeforeStop));
             Assert.That(fsm.StopCount, Is.EqualTo(1));
 
         }
@@ -157,6 +158,7 @@ namespace HemtentaTester
             mp.Stop();
 
             Assert.That(fsm.StopCount, Is.EqualTo(0));
+            Assert.That(mp.NowPlaying, Is.EqualTo("Tystnad råder"));
         }
 
         [Test]
@@ -165,10 +167,7 @@ namespace HemtentaTester
             FakeSong playing = new FakeSong("Purple Haze");
             FakeSong nextInQueue = new FakeSong("Smoke on the Water");
 
-            List<ISong> inDb = new List<ISong>()
-            {
-                playing, nextInQueue
-            };
+            List<ISong> inDb = new List<ISong>() {playing, nextInQueue};
 
             FakeSoundMaker fsm = new FakeSoundMaker();
             fsm.NowPlaying = playing.Title;
@@ -179,13 +178,13 @@ namespace HemtentaTester
             mp.SetDb(db);
 
             mp.LoadSongs("stuff");
-
             int originallyInQueue = mp.NumSongsInQueue;
+
             mp.NextSong();
 
             Assert.That(mp.NowPlaying, Is.EqualTo("Spelar " + nextInQueue.Title));
             Assert.That(mp.NumSongsInQueue, Is.EqualTo(originallyInQueue - 1));
-
+            Assert.That(fsm.PlayCount, Is.EqualTo(1));
         }
 
         [Test]

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace HemtentaTdd2017.blog
 {
@@ -18,11 +14,6 @@ namespace HemtentaTdd2017.blog
 
         public bool UserIsLoggedIn { get; private set; }
 
-
-        // Försöker logga in en användare. Man kan
-        // se om inloggningen lyckades på property
-        // UserIsLoggedIn.
-        // Kastar ett exception om User är null.
         public void LoginUser(User u)
         {
             if (u == null)
@@ -40,8 +31,6 @@ namespace HemtentaTdd2017.blog
             
         }
 
-        // Försöker logga ut en användare. Kastar
-        // exception om User är null.
         public void LogoutUser(User u)
         {
             if (u == null)
@@ -52,13 +41,6 @@ namespace HemtentaTdd2017.blog
 
         }
 
-
-        // För att publicera en sida måste Page vara
-        // ett giltigt Page-objekt och användaren
-        // måste vara inloggad.
-        // Returnerar true om det gick att publicera,
-        // false om publicering misslyckades och
-        // exception om Page har ett ogiltigt värde.
         public bool PublishPage(Page p)
         {
             if (p == null)

@@ -28,7 +28,6 @@ namespace HemtentaTester
             double originalAmount = account.Amount;
             account.Deposit(amount);
             Assert.That(account.Amount, Is.EqualTo(originalAmount + amount));
-
         }
 
         [TestCase(-0.01)]
@@ -44,11 +43,9 @@ namespace HemtentaTester
         [Test]
         public void Deposit_ValidInputTooLargeForAccountThrowsException()
         {
-
             account.Deposit(double.MaxValue);
 
             Assert.That(() => account.Deposit(1), Throws.TypeOf<OperationNotPermittedException>());
-
         }
 
         [TestCase(0.1, 0.1)]
@@ -79,7 +76,6 @@ namespace HemtentaTester
         [Test]
         public void Withdraw_ValidInputLargerThanAmountThrowsException()
         {
-
             Assert.That(() => account.Withdraw(0.1), Throws.TypeOf<InsufficientFundsException>());
             account.Deposit(5000);
             Assert.That(() => account.Withdraw(5000.1), Throws.TypeOf<InsufficientFundsException>());
@@ -100,6 +96,9 @@ namespace HemtentaTester
         {
             IAccount reciever = new Account();
             Assert.That(() => account.TransferFunds(reciever, 0.1), Throws.TypeOf<InsufficientFundsException>());
+
+            account.Deposit(300);
+            Assert.That(() => account.TransferFunds(reciever, 301), Throws.TypeOf<InsufficientFundsException>());
         }
 
         [Test]
@@ -109,9 +108,7 @@ namespace HemtentaTester
             reciever.Deposit(double.MaxValue);
             account.Deposit(double.MaxValue);
 
-
             Assert.That(() => account.TransferFunds(reciever, 1), Throws.TypeOf<OperationNotPermittedException>());
-
         }
 
         [Test]

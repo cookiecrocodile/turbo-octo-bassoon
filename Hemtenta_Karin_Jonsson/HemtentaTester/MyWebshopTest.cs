@@ -42,7 +42,20 @@ namespace HemtentaTester
         {
             mw = new MyWebshop();
         }
-   
+
+        /*
+        Checkout
+        
+        Har förutsatt att checkout använder sig av IBillings pay-metod och att Billing 
+        kastar exception om betalningen misslyckas
+        Om inget exception kommer från Billing förutsätter jag att betalningen lyckats
+        och att checkout i så fall tömmer varukorgen
+        Om inget fanns i korgen när man gick till checkout har jag också förutsatt att man får ett exception.
+        Man kan förstås teoretiskt tänka sig att man kan ha en korg full med gratis-produkter, 
+        men jag tänkte att man kanske inte ville kalla på pay-metoden i onödan
+        
+        */
+
         [Test]
         public void Checkout_Success()
         {

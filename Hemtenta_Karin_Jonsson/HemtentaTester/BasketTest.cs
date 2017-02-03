@@ -21,9 +21,13 @@ namespace HemtentaTester
             b = new Basket();
         }
 
+        //AddProduct:
+        //Har antagit att man inte får lägga till en produkt som är null, eller har ett namn som är null,
+        //men att det får finnas produkter som kostar 0. Har också antagit att man inte får lägga till 
+        //mindre än 1 produkt. 
+
         [TestCase(1)]
         [TestCase(5000)]
-
         public void AddProduct_Success(int amount)
         {
             decimal expected;
@@ -65,6 +69,13 @@ namespace HemtentaTester
             Assert.That(() => b.AddProduct(p, amount), Throws.TypeOf<ArgumentException>());
         }
 
+        //RemoveProduct
+        //Har antagit att alla värden på amount är godkända som är över 1.
+        //Har också antagit att man får ett exception om man försöker ta bort en produkt som inte finns
+        //i korgen över huvud taget, men att det går att försökta ta bort fler av en existerande produkt
+        //än vad som finns (och att i så fall tas alla bort).
+
+
         [TestCase(563, 1)]
         [TestCase(17, 6)]
         public void RemoveProduct_SuccessRemovesCorrectAmount(int noPInDb, int noToRemove)
@@ -85,6 +96,7 @@ namespace HemtentaTester
         }
 
         [TestCase(-1)]
+        [TestCase(0)]
         public void RemoveProduct_InvalidAmountThrowsException(int amount)
         {
             Product p = new Product();
@@ -111,9 +123,6 @@ namespace HemtentaTester
         [Test]
         public void RemoveProduct_AmountHigherThanInBasketRemovesAll() 
         {
-            //Tänker att om man försöker ta bort fler av produkten än det finns
-            //så tar jag bort alla som finns, hellre än att kasta ett exception
-
             Product inBasket = new Product() { Name="Temporary product", Price = 100m };
             b.AddProduct(inBasket, 1);
             decimal expected = b.TotalCost;
@@ -124,7 +133,6 @@ namespace HemtentaTester
             b.RemoveProduct(toRemoveLater, 3);
 
             Assert.That(expected, Is.EqualTo(b.TotalCost));
-            
         }
     }
 }

@@ -19,6 +19,7 @@ namespace HemtentaTdd2017.music
             soundMaker = sm;
         }
 
+
         public int NumSongsInQueue
         {
             get
@@ -27,7 +28,6 @@ namespace HemtentaTdd2017.music
             }
         }
         
-
         public void LoadSongs(string search)
         {
             if (string.IsNullOrEmpty(search))
